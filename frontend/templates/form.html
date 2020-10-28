@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <h4>{{ form_title }}</h4>
+            <form method="post" class="form">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit" class="btn btn btn-success"> <i class="fa fa-save"></i> Save </button>
+            </form>
+        </div>
+    <div class="col-2"><a href="{{ back_url }}" class="btn btn-danger">Back</a> </div>
+    </div>
+
+{% endblock %}

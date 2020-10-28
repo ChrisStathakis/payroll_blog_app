@@ -1,0 +1,118 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-8">
+            <br>
+            <h4>Employers</h4>
+                        <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Create New Employer
+            </button>
+            <br>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Create Occupation</h4>
+                        <form method="post" action='{% url "create_person" %}' class="form">
+                            {% csrf_token %}
+                            {{ create_form }}
+                            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Occupation</th>
+                        <th>Balance</th>
+                        <th>-</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for person in persons %}
+                        <tr>
+                            <td>{{person.id }}</td>
+                            <td>{{ person.name }}</td>
+                            <td>{{ person.tag_occupation }}</td>
+                            <td>{{ person.tag_balance }}</td>
+                            <td><a href="{{ person.get_card_url }}" class="btn btn-primary">Edit </a> </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            <br>
+            <h4>Occupations</h4>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleOccup">
+                Create New Occupation
+            </button>
+            <br>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleOccup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Create Occupation</h4>
+                        <form method="post" action='{% url "create_occupation" %}' class="form">
+                            {% csrf_token %}
+                            {{ create_occup }}
+                            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Filter</th>
+                        <th>-</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for occup in occupations %}
+                        <tr>
+                            <td>{{ occup.id }}</td>
+                            <td>{{ occup.title }}</td>
+                            <td><input type="checkbox" value="{{ occup.id }}" /></td>
+                            <td><a href="" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a> </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+{% endblock content %}
+    

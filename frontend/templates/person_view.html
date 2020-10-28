@@ -1,0 +1,138 @@
+{% extends 'index.html' %} {% load static %}
+{% block extra_js %}
+    <link rel="stylesheet" href="{% static 'datetimepicker/jquery.datetimepicker.css' %}" />
+    <script src="{% static 'datetimepicker/' %}jquery.datetimepicker.full.min.js" ></script>
+
+
+
+<script>
+  $(function () {
+    $("#id_date_start").datetimepicker({
+      format: 'd/m/Y H:i',
+    });
+  });
+</script>
+    <script>
+  $(function () {
+    $("#id_date_end").datetimepicker({
+      format: 'd/m/Y H:i',
+    });
+  });
+</script>
+
+  <script>
+    $(function () {
+      $("#datetimepicker").datetimepicker();
+    });
+  </script>
+
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-4">
+            <h4>{{ object }}</h4>
+        </div>
+        <div class="col-6"><a class="btn btn-warning" href="{% url 'homepage' %}">Back</a> </div>
+        <div class="col-1"></div>
+        <div class="col-4">
+            <h4>{{ obj }}</h4>
+            <form method="post" class="form">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+            <br>
+            <hr >
+            <ul class="list-group">
+              <li class="list-group-item">Total {{ total_hours }} {{ total_cost }}</li>
+              <li class="list-group-item">Payments {{ total_payroll }}</li>
+              <li class="list-group-item">Difference</li>
+            </ul>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-4">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Create Payment</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Add Time</a>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                  <h4>Create Payment</h4>
+                  <form method="post" class="form" action="{% url 'handle_payroll' 0 'create' %}">
+                      {% csrf_token %}
+                      {{ payment_form }}
+                      <button type="submit" class="btn btn-primary">Save</button>
+                  </form>
+              </div>
+              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                  <form method="post" class="form" action="{% url 'handle_schedule' 0 'create' %}">
+                      {% csrf_token %}
+                      {{ calendar_form }}
+                      <button type="submit" class="btn btn-primary">Save</button>
+                  </form>
+              </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <br><hr />
+            <h4>History</h4>
+        </div>
+        <div class="col-6">
+            <h4>Payments</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Value</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ele in payments %}
+                        <tr>
+                            <th>{{ ele.date|date }}</th>
+                            <th>{{ ele }}</th>
+                            <th>{{ ele.tag_value }}</th>
+                            <th><a href="{% url 'handle_payroll' ele.id  'delete'%}" class="btn btn-danger">Delete</a> </th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <h4>Schedules</h4>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Value</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ele in schedules %}
+                    <tr>
+                        <th>{{ ele.date_start }} - {{ ele.date_end }}</th>
+                        <th>{{ ele }}</th>
+                        <th>{{ ele.tag_value }}</th>
+                        <th><a href="{% url 'handle_schedule' ele.id  'delete'%}" class="btn btn-danger">Delete</a> </th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
